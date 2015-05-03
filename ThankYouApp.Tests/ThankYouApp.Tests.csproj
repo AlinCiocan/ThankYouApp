@@ -35,6 +35,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -97,6 +100,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\UserServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +110,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ThankYouApp.BusinessLogic\ThankYouApp.BusinessLogic.csproj">
+      <Project>{DDFADF3A-E9EB-42D5-B176-D774A0C4D9C9}</Project>
+      <Name>ThankYouApp.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThankYouApp.Repository\ThankYouApp.Repository.csproj">
+      <Project>{9F82F3B2-4E61-429F-A85C-9A838C469D38}</Project>
+      <Name>ThankYouApp.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ThankYouApp\ThankYouApp.csproj">
       <Project>{28505F79-00A7-469E-A7CE-00509BCA36EC}</Project>
       <Name>ThankYouApp</Name>
