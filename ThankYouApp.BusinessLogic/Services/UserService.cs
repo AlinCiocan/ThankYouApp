@@ -1,4 +1,6 @@
-﻿using ThankYouApp.Repository.DAOs;
+﻿using System.Security.Cryptography;
+using System.Threading.Tasks;
+using ThankYouApp.Repository.DAOs;
 using ThankYouApp.Repository.Models;
 
 namespace ThankYouApp.BusinessLogic.Services
@@ -13,14 +15,30 @@ namespace ThankYouApp.BusinessLogic.Services
             _userDao = userDao;
         }
 
-        public void RegisterUser(User newUser)
+        public bool RegisterUser(User newUser)
         {
-            _userDao.AddUser(newUser);
+            if (IsUserAlreadyInDatabase(newUser))
+            {
+                return false;
+            }
+
+            return _userDao.AddUser(newUser);
+        }
+
+        private bool IsUserAlreadyInDatabase(User newUser)
+        {
+            return _userDao.GetUserByEmail(newUser.Email) != null;
         }
 
         public bool LoginUser(User user)
         {
-            return true;
+            var userFromDb = _userDao.GetUserByEmail(user.Email);
+            if (userFromDb == null)
+            {
+                return false;
+            }
+
+            return userFromDb.Password == user.Password;
         }
     }
 }

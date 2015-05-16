@@ -3,8 +3,8 @@ using ThankYouApp.Repository.Models;
 
 namespace ThankYouApp.Repository.Contexts
 {
-    class ThankYouAppContext : DbContext
+    public class ThankYouAppContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }
