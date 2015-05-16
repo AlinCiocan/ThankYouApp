@@ -52,18 +52,20 @@ namespace ThankYouApp.Tests.BusinessLogic
         [TestMethod]
         public void UserShouldBeAbleToLoginAfterRegistering()
         {
+            // Arrange
             var userService = CreateUserService(_userDaoStub.Object);
 
+            // Act
             userService.RegisterUser(_someUser);
-
             var result = userService.LoginUser(_someUser);
+            
+            // Assert
             Assert.IsTrue(result, "User could not login after registering.");
         }
 
         [TestMethod]
         public void UserShouldNotBeAbleToLoginWithAWrongPassword()
         {
-
             // Arrange
             var userService = CreateUserService(_userDaoStub.Object);
             
@@ -80,7 +82,6 @@ namespace ThankYouApp.Tests.BusinessLogic
         public void UserShouldNotBeAbleToRegisterTwice()
         {
             // Arrange
-            SetUpUserDaoStub();
             var userService = CreateUserService(_userDaoStub.Object);
             
             // Act
