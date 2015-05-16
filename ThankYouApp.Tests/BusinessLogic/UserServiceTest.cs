@@ -44,12 +44,23 @@ namespace ThankYouApp.Tests.BusinessLogic
         }
 
         [TestMethod]
+        public void UserShouldNotBeAbleToLoginIfItsNotRegistered()
+        {
+            var userService = CreateUserService();
+
+            var userThatIsNotRegistered = _someUser;
+            var result = userService.LoginUser(userThatIsNotRegistered);
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
         public void UserShouldNotBeAbleToLoginWithAWrongPassword()
         {
             var userService = CreateUserService();
             
             userService.RegisterUser(_someUser);
-            var result = userService.LoginUser(_userWithWrongPassword);
+            var result = userService.LoginUser(new User{Password = "WrongPassword", Email = _someUser.Email});
 
             result.Should().BeFalse();
         }

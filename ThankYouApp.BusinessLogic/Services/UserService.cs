@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Threading.Tasks;
-using ThankYouApp.Repository.DAOs;
+﻿using ThankYouApp.Repository.DAOs;
 using ThankYouApp.Repository.Models;
 
 namespace ThankYouApp.BusinessLogic.Services
