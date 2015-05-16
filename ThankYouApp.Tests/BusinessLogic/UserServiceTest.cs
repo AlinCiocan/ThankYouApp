@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThankYouApp.BusinessLogic.Services;
 using ThankYouApp.Repository.DAOs;
 using ThankYouApp.Repository.Models;
+using ThankYouApp.Tests.CustomFakes;
 
 namespace ThankYouApp.Tests.BusinessLogic
 {
@@ -15,65 +13,43 @@ namespace ThankYouApp.Tests.BusinessLogic
         private const string SomePassword = "pa22word";
 
         private User _someUser;
-        private Mock<IUserDao> _userDaoStub;
         private User _userWithWrongPassword;
-           
+
+        private IUserDao _userDaoStub;
+
         [TestInitialize]
         public void SetUp()
         {
             _someUser = new User { Email = SomeEmail, Password = SomePassword };
             _userWithWrongPassword = new User {Email = _someUser.Email, Password = "WrongPassword"};
             
-            SetUpUserDaoStub();
-
+            _userDaoStub = new FakeUserDao();
         }
 
-        private UserService CreateUserService(IUserDao userDao)
+        private UserService CreateUserService()
         {
-            return new UserService(userDao);
-        }
-
-        // TODO: find a better name for this method
-        private void SetUpUserDaoStub()
-        {
-
-            _userDaoStub = new Mock<IUserDao>();
-
-            var users = new List<User>();
-
-            _userDaoStub.Setup(userDao => userDao.GetUserByEmail(It.IsAny<string>()))
-                .Returns((string email) => { return users.FirstOrDefault(user => user.Email == email); });
-         
-            _userDaoStub.Setup(userDao => userDao.AddUser(It.IsAny<User>()))
-                        .Callback((User newUser) => users.Add(newUser))
-                        .Returns(true);
+            return new UserService(_userDaoStub);
         }
 
         [TestMethod]
         public void UserShouldBeAbleToLoginAfterRegistering()
         {
-            // Arrange
-            var userService = CreateUserService(_userDaoStub.Object);
+            var userService = CreateUserService();
 
-            // Act
             userService.RegisterUser(_someUser);
             var result = userService.LoginUser(_someUser);
             
-            // Assert
             Assert.IsTrue(result, "User could not login after registering.");
         }
 
         [TestMethod]
         public void UserShouldNotBeAbleToLoginWithAWrongPassword()
         {
-            // Arrange
-            var userService = CreateUserService(_userDaoStub.Object);
+            var userService = CreateUserService();
             
-            // Act
             userService.RegisterUser(_someUser);
             var result = userService.LoginUser(_userWithWrongPassword);
 
-            // Assert
             Assert.IsFalse(result, "User was able to login with a wrong password");
         }
 
@@ -81,14 +57,11 @@ namespace ThankYouApp.Tests.BusinessLogic
         [TestMethod]
         public void UserShouldNotBeAbleToRegisterTwice()
         {
-            // Arrange
-            var userService = CreateUserService(_userDaoStub.Object);
+            var userService = CreateUserService();
             
-            // Act
             bool hasFirstTimeRegistered = userService.RegisterUser(_someUser);
             bool hasSecondTimeRegistered = userService.RegisterUser(_someUser);
             
-            // Assert
             Assert.IsTrue(hasFirstTimeRegistered);
             Assert.IsFalse(hasSecondTimeRegistered);
         }
