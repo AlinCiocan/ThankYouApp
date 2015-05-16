@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThankYouApp.BusinessLogic.Services;
 using ThankYouApp.Repository.DAOs;
 using ThankYouApp.Repository.Models;
@@ -38,8 +39,8 @@ namespace ThankYouApp.Tests.BusinessLogic
 
             userService.RegisterUser(_someUser);
             var result = userService.LoginUser(_someUser);
-            
-            Assert.IsTrue(result, "User could not login after registering.");
+
+            result.Should().BeTrue();
         }
 
         [TestMethod]
@@ -50,7 +51,7 @@ namespace ThankYouApp.Tests.BusinessLogic
             userService.RegisterUser(_someUser);
             var result = userService.LoginUser(_userWithWrongPassword);
 
-            Assert.IsFalse(result, "User was able to login with a wrong password");
+            result.Should().BeFalse();
         }
 
 
@@ -61,9 +62,9 @@ namespace ThankYouApp.Tests.BusinessLogic
             
             bool hasFirstTimeRegistered = userService.RegisterUser(_someUser);
             bool hasSecondTimeRegistered = userService.RegisterUser(_someUser);
-            
-            Assert.IsTrue(hasFirstTimeRegistered);
-            Assert.IsFalse(hasSecondTimeRegistered);
+
+            hasFirstTimeRegistered.Should().BeTrue();
+            hasSecondTimeRegistered.Should().BeFalse();
         }
     }
 
